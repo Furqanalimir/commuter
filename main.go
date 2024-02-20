@@ -13,18 +13,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	basePath = "/api/v0.1"
+)
+
 func main() {
 	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	// router := gin.Default()
-
-	handlers.NewHandler(&handlers.FruitsConfig{
-		R: router,
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
+	handlers.NewFruitHandler(&handlers.FruitConfig{
+		R:        router,
+		BasePath: basePath,
 	})
-
+	handlers.NewUserHandler(&handlers.UserConfig{
+		R:        router,
+		BasePath: basePath,
+	})
 	srv := &http.Server{
-		Addr:    ":8080",
-		Handler: router,
+		Addr:         ":8080",
+		Handler:      router,
+		ReadTimeout:  time.Second * 5,
+		WriteTimeout: time.Second * 5,
+		IdleTimeout:  time.Second * 5,
 	}
 
 	// Graceful server shutdown - https://github.com/gin-gonic/examples/blob/master/graceful-shutdown/graceful-shutdown/server.go

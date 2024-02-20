@@ -1,4 +1,4 @@
-package validator
+package middleware
 
 import (
 	helper "microservices/micro-service/commuter/utils"
