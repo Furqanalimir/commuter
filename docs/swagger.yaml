@@ -11,12 +11,34 @@ definitions:
     - email
     - password
     type: object
+  data.Fruit:
+    properties:
+      currency:
+        enum:
+        - usd
+        - kd
+        type: string
+      id:
+        type: integer
+      name:
+        maxLength: 15
+        minLength: 4
+        type: string
+      origin:
+        type: string
+      price:
+        type: number
+    required:
+    - currency
+    - name
+    - origin
+    - price
+    type: object
   data.User:
     properties:
       age:
         type: integer
       email:
-        description: Authentication
         type: string
       id:
         type: integer
@@ -43,23 +65,75 @@ definitions:
     - phone
     - role
     type: object
-  gin.H:
-    additionalProperties: {}
+  helper.SwaggerRequestResponse:
+    properties:
+      data:
+        type: string
+      error:
+        type: string
     type: object
 host: localhost:8080
 info:
   contact:
-    email: support@swagger.io
+    email: mirfurqan89@gmail.com
     name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server todo server. You can visit the GitHub repository
-    at https://github.com/LordGhostX/swag-gin-demo
+    url: https://furqanali.vercel.app/
+  description: This is a sample server user server. You can visit the GitHub repository
+    at https://github.com/Furqanalimir/commuter
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  title: Go + Gin Todo API
+  title: Go + Gin User API
   version: "1.0"
 paths:
+  /fruits:
+    get:
+      description: fetch list of all available fruits
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: fruit list
+          schema:
+            items:
+              $ref: '#/definitions/data.Fruit'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Fetch all fruits
+      tags:
+      - fruits
+    post:
+      description: add fruit info to stoed data
+      parameters:
+      - description: fruit data
+        in: body
+        name: fruit
+        required: true
+        schema:
+          $ref: '#/definitions/data.Fruit'
+      produces:
+      - applicaton/json
+      responses:
+        "200":
+          description: fruit list
+          schema:
+            items:
+              $ref: '#/definitions/data.Fruit'
+            type: array
+        "400":
+          description: error message
+          schema:
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
+        "401":
+          description: unauthorized message
+          schema:
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: add fruit to fruits list
+      tags:
+      - fruits
   /fruits/{id}:
     get:
       description: get fruit info by id
@@ -75,14 +149,16 @@ paths:
         "200":
           description: time stamp
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/data.Fruit'
         "401":
           description: unauthorized message
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
       security:
       - ApiKeyAuth: []
-      summary: fruits
+      summary: fruits by id
+      tags:
+      - fruits
   /users:
     post:
       description: Save User data
@@ -99,11 +175,11 @@ paths:
         "200":
           description: create response
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
         "400":
           description: error response
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
       summary: Create user
       tags:
       - user
@@ -123,11 +199,11 @@ paths:
         "200":
           description: token
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
         "422":
           description: invalid data
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
       summary: Create authentication token
       tags:
       - user
@@ -140,11 +216,11 @@ paths:
         "200":
           description: time stamp
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
         "401":
           description: unauthorized message
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/helper.SwaggerRequestResponse'
       security:
       - ApiKeyAuth: []
       summary: Verify user token

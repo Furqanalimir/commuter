@@ -11,14 +11,15 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// Authenticaton used to be in when only email and password is needed
 type Authentication struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=7"`
 }
+
 type User struct {
-	ID       int    `json:"id"`
-	UserName string `json:"name" validate:"required,min=3"`
-	// Authentication
+	ID        int       `json:"id"`
+	UserName  string    `json:"name" validate:"required,min=3"`
 	Email     string    `json:"email" validate:"required,email"`
 	Password  string    `json:"password" validate:"required,min=7"`
 	Phone     int       `json:"phone" validate:"required,numeric,min=10"`
@@ -29,11 +30,15 @@ type User struct {
 	deletedAt time.Time `json:"-"`
 }
 
+// convert incoming data from reader(c.Request) to json/Struct
+// if converted return nil otherwise return error
 func (u *User) ToJSON(r io.Reader) error {
 	d := json.NewDecoder(r)
 	return d.Decode(u)
 }
 
+// validate user filelds
+// if validated return nil otherwise return error
 func (u *User) Validate() error {
 	validate := validator.New()
 	err := validate.Struct(u)
@@ -45,6 +50,7 @@ func (u *User) Validate() error {
 	return err
 }
 
+// verify user role if matchd return true otherwise false
 func (u *User) VerifyRole(role string) bool {
 	for _, user := range userData {
 		if user.ID == u.ID && user.Role == role {
@@ -63,18 +69,19 @@ func (u *User) VerifyRole(role string) bool {
 // NOTE: you may ask why wouldn't I just do this outside of validator, because doing this way
 // hooks right into validator and you can combine with validation tags and still have a
 // common error output format.
-func UserStructLevelValidation(sl validator.StructLevel) {
+// func UserStructLevelValidation(sl validator.StructLevel) {
 
-	user := sl.Current().Interface().(User)
+// 	user := sl.Current().Interface().(User)
 
-	if len(user.UserName) == 3 || len(user.Password) == 0 {
-		sl.ReportError(user.UserName, "fname", "FirstName", "fnameorlname", "")
-		sl.ReportError(user.Password, "lname", "LastName", "fnameorlname", "")
-	}
+// 	if len(user.UserName) == 3 || len(user.Password) == 0 {
+// 		sl.ReportError(user.UserName, "fname", "FirstName", "fnameorlname", "")
+// 		sl.ReportError(user.Password, "lname", "LastName", "fnameorlname", "")
+// 	}
 
-	// plus can do more, even with different tag than "fnameorlname"
-}
+// 	// plus can do more, even with different tag than "fnameorlname"
+// }
 
+// get next id from list (lastId+1)
 func GetNextId() int {
 	if len(userData) == 0 {
 		return 1
@@ -83,6 +90,7 @@ func GetNextId() int {
 	return u.ID + 1
 }
 
+// get user data if id matched otherwise return error
 func GetUserById(id int) (*User, error) {
 	for _, u := range userData {
 		if u.ID == id {
@@ -92,6 +100,7 @@ func GetUserById(id int) (*User, error) {
 	return &User{}, fmt.Errorf("User with id %d not found", id)
 }
 
+// verify if user email exists and passwaord matches
 func (u *User) VerifyUser() (uint64, error) {
 
 	for _, user := range userData {

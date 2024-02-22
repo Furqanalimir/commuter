@@ -37,8 +37,8 @@ func NewUserHandler(c *UserConfig) {
 // @Param		user body data.User true "create user"
 // @produce		applicaton/json
 // @Tags		user
-// @Success		200	{object} gin.H  "create response"
-// @Success		400	{object} gin.H  "error response"
+// @Success		200	{object} helper.SwaggerRequestResponse  "create response"
+// @Success		400	{object} helper.SwaggerRequestResponse  "error response"
 // @Router		/users [post]
 func handlerAddUser(c *gin.Context) {
 	u := &data.User{}
@@ -67,8 +67,8 @@ func handlerAddUser(c *gin.Context) {
 // @Param       Authentication body data.Authentication true "user email and password"
 // @produce		applicaton/json
 // @Tags		user
-// @Success		200	{object} gin.H "token"
-// @Success		422	{object} gin.H "invalid data"
+// @Success		200	{object} helper.SwaggerRequestResponse "token"
+// @Success		422	{object} helper.SwaggerRequestResponse "invalid data"
 // @Router		/users/login [post]
 func handleLogin(c *gin.Context) {
 	var u data.User
@@ -91,8 +91,8 @@ func handleLogin(c *gin.Context) {
 // @Description	Authenticate user token
 // @produce		applicaton/json
 // @Tags		user
-// @Success		200	{object} gin.H "time stamp"
-// @Success		401	{object} gin.H "unauthorized message"
+// @Success		200	{object} helper.SwaggerRequestResponse "time stamp"
+// @Success		401	{object} helper.SwaggerRequestResponse "unauthorized message"
 // @Router		/users/verify [get]
 // @Security ApiKeyAuth
 func handlerVerifyUser(c *gin.Context) {

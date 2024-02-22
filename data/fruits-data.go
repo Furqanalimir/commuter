@@ -23,12 +23,15 @@ type Fruit struct {
 
 type Fruits []*Fruit
 
+// validate if fruit is of correct type
 func (f *Fruit) Validate() error {
 	validate := validator.New()
 	//custom validation for field currency
 	err := validate.Struct(f)
 	if err != nil {
+		// checking for error produced by json validaton rules
 		for _, err := range err.(validator.ValidationErrors) {
+			// log found errors with field name and their tags
 			log.Println(err.Field(), err.Tag())
 		}
 	}
@@ -58,14 +61,21 @@ func (f *Fruit) Validate() error {
 // 	return len(matches) == 1
 // }
 
+// get next of fruits
 func getNextId() int {
 	f := fruitList[len(fruitList)-1]
 	return f.ID + 1
 }
+
+// convert incoming data from reader(c.Request) to struct of type Fruit
+// passed type Fruit will have Fruit struct type data  or Error
 func (f *Fruit) ToJSON(r io.Reader) error {
 	d := json.NewDecoder(r)
 	return d.Decode(f)
 }
+
+// get fruit details by id
+// reurn fruits list or formatted error message
 func GetFruit(id int) (*Fruit, error) {
 	for _, f := range fruitList {
 		if f.ID == id {
@@ -74,15 +84,22 @@ func GetFruit(id int) (*Fruit, error) {
 	}
 	return &Fruit{}, fmt.Errorf("item with id %d not found", id)
 }
+
+// get all fruits
 func GetAllFuits() Fruits {
 	return fruitList
 }
+
+// add new fruit to list
+// return fruits list or error
 func AddFruit(f *Fruit) (Fruits, error) {
-	f.ID = getNextId()
+	f.ID = getNextId() // get next id from list
 	fruitList = append(fruitList, f)
 	return fruitList, nil
 }
 
+// remove fruit from list
+// return error or nil
 func RemoveFruit(id int) error {
 	for i, f := range fruitList {
 		if f.ID == id {

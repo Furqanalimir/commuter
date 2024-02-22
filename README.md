@@ -5,6 +5,7 @@
 
 # How to run
     install dependencies
+    $ go mod tidy
     check swagger.md for swagger docs
 # Run 
     go run main.go

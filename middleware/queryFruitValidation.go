@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -10,10 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// validate id is passed in params or not
 func QueryValidationMiddleware(c *gin.Context) {
-	log.Println("query: ", c.Query("id"))
 	id, err := strconv.Atoi(c.Param("id"))
-	log.Println("id: ", id)
 	if err != nil {
 		helper.ReqResHelper(c, http.StatusBadRequest, nil, "Id is required and must be an integer")
 		c.Abort()
@@ -21,4 +19,18 @@ func QueryValidationMiddleware(c *gin.Context) {
 	}
 	c.Set("id", id)
 	c.Next()
+}
+
+// validate id is passed in params or not
+func QueryValidationMiddlewareD(field string, errMsg string) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		id, err := strconv.Atoi(c.Param(field))
+		if err != nil {
+			helper.ReqResHelper(c, http.StatusBadRequest, nil, errMsg)
+			c.Abort()
+			return
+		}
+		c.Set("id", id)
+		c.Next()
+	}
 }
