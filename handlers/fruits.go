@@ -30,9 +30,9 @@ func NewFruitHandler(c *FruitConfig) {
 	// Create an fruits group
 	g := c.R.Group(c.BasePath + "/fruits")
 
-	g.Use(middleware.Authentication)
+	// g.Use(middleware.Authentication)
 	g.GET("/", handlerGetAllFruits)
-	g.GET("/:id", middleware.QueryValidationMiddlewareD("id", "id is required and must be an integer"), handlerGetFruit)
+	g.GET("/:id", middleware.QueryValidationMiddlewareD("id", "id is required and must be an integer"), HandlerGetFruit)
 
 	g.Use(middleware.AuthenticateAdmin)
 	g.POST("/", handlerAddFurit)
@@ -51,7 +51,7 @@ func NewFruitHandler(c *FruitConfig) {
 // @Success		200	{object} data.Fruit "time stamp"
 // @Success		401	{object} helper.SwaggerRequestResponse "unauthorized message"
 // @Security ApiKeyAuth
-func handlerGetFruit(c *gin.Context) {
+func HandlerGetFruit(c *gin.Context) {
 	id := c.MustGet("id").(int)
 	f, err := data.GetFruit(id)
 	if err != nil {

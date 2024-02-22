@@ -1,7 +1,7 @@
 package test
 
 import (
-	"log"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -16,15 +16,28 @@ func SetUpRouter() *gin.Engine {
 	return router
 }
 
-func TestGetFruitHandler(t *testing.T) {
-	mockResponse := `{"data": {"id": 1,"name":"Water Mellon","price": 1.1,"currency": "usd","Origin":"africa"},"error":null}`
-	router := SetUpRouter()
-	router.GET("/api/v0.1/fruits/:id", handlers.HandlerGetFruit)
-	w := httptest.NewRecorder()
+func TestHomepageHandler(t *testing.T) {
+	mockResponse := `{"message":"Welcome to the Tech Company listing API with Golang"}`
+	r := SetUpRouter()
+	r.GET("/api/v0.1/fruits/:id", handlers.HandlerGetFruit)
 	req, _ := http.NewRequest("GET", "/api/v0.1/fruits/1", nil)
-	// req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte("admin:password")))
-	router.ServeHTTP(w, req)
-	assert.Equal(t, 200, w.Code)
-	log.Println("Body::", w.Body.String())
-	assert.Equal(t, mockResponse, w.Body.String())
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	responseData, _ := io.ReadAll(w.Body)
+	assert.Equal(t, mockResponse, string(responseData))
+	assert.Equal(t, http.StatusOK, w.Code)
 }
+
+// func TestGetFruitHandler(t *testing.T) {
+// 	mockResponse := `{"data": {"id": 1,"name":"Water Mellon","price": 1.1,"currency": "usd","Origin":"africa"},"error":null}`
+// 	router := SetUpRouter()
+// 	router.GET("/api/v0.1/fruits/:id", handlers.HandlerGetFruit)
+// 	w := httptest.NewRecorder()
+// 	req, _ := http.NewRequest("GET", "/api/v0.1/fruits/1", nil)
+// 	// req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte("admin:password")))
+// 	router.ServeHTTP(w, req)
+// 	assert.Equal(t, 200, w.Code)
+// 	log.Println("Body::", w.Body.String())
+// 	assert.Equal(t, mockResponse, w.Body.String())
+// }

@@ -20,7 +20,7 @@ type UserConfig struct {
 func NewUserHandler(c *UserConfig) {
 	// Create an fruits group
 	g := c.R.Group(c.BasePath + "/users")
-	g.POST("/", handlerAddUser)
+	g.POST("/", HandlerAddUser)
 	g.POST("/login", handleLogin)
 
 	// routes with Query middleware validation
@@ -40,7 +40,7 @@ func NewUserHandler(c *UserConfig) {
 // @Success		200	{object} helper.SwaggerRequestResponse  "create response"
 // @Success		400	{object} helper.SwaggerRequestResponse  "error response"
 // @Router		/users [post]
-func handlerAddUser(c *gin.Context) {
+func HandlerAddUser(c *gin.Context) {
 	u := &data.User{}
 	err := u.ToJSON(c.Request.Body)
 	if err != nil {
