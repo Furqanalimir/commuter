@@ -1,0 +1,158 @@
+basePath: /api/v0.1
+definitions:
+  data.Authentication:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 7
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  data.User:
+    properties:
+      age:
+        type: integer
+      email:
+        description: Authentication
+        type: string
+      id:
+        type: integer
+      name:
+        minLength: 3
+        type: string
+      password:
+        minLength: 7
+        type: string
+      phone:
+        minimum: 10
+        type: integer
+      role:
+        enum:
+        - admin
+        - manager
+        - user
+        type: string
+    required:
+    - age
+    - email
+    - name
+    - password
+    - phone
+    - role
+    type: object
+  gin.H:
+    additionalProperties: {}
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server todo server. You can visit the GitHub repository
+    at https://github.com/LordGhostX/swag-gin-demo
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Go + Gin Todo API
+  version: "1.0"
+paths:
+  /fruits/{id}:
+    get:
+      description: get fruit info by id
+      parameters:
+      - description: get fruit by id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - applicaton/json
+      responses:
+        "200":
+          description: time stamp
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: unauthorized message
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - ApiKeyAuth: []
+      summary: fruits
+  /users:
+    post:
+      description: Save User data
+      parameters:
+      - description: create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/data.User'
+      produces:
+      - applicaton/json
+      responses:
+        "200":
+          description: create response
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: error response
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create user
+      tags:
+      - user
+  /users/login:
+    post:
+      description: validate user and generate token
+      parameters:
+      - description: user email and password
+        in: body
+        name: Authentication
+        required: true
+        schema:
+          $ref: '#/definitions/data.Authentication'
+      produces:
+      - applicaton/json
+      responses:
+        "200":
+          description: token
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: invalid data
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create authentication token
+      tags:
+      - user
+  /users/verify:
+    get:
+      description: Authenticate user token
+      produces:
+      - applicaton/json
+      responses:
+        "200":
+          description: time stamp
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: unauthorized message
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+      - ApiKeyAuth: []
+      summary: Verify user token
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

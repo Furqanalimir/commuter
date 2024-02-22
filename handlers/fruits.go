@@ -1,36 +1,60 @@
+// Package Classification of Fruits API
+//
+// Schemes: http
+// BasePath: /
+// Version: 1.0.0
+// Consumes:
+//   - application/json
+//
+// Produces:
+//   - application/json
+//
+// swagger:meta
 package handlers
 
 import (
-	"microservices/micro-service/commuter/data"
-	validator "microservices/micro-service/commuter/middleware"
-	helper "microservices/micro-service/commuter/utils"
 	"net/http"
 
+	"github.com/furqanalimir/commuter/data"
+	"github.com/furqanalimir/commuter/middleware"
+	helper "github.com/furqanalimir/commuter/utils"
 	"github.com/gin-gonic/gin"
 )
 
-type FruitsConfig struct {
-	R *gin.Engine
+type FruitConfig struct {
+	R        *gin.Engine
+	BasePath string
 }
 
-func NewHandler(c *FruitsConfig) {
+func NewFruitHandler(c *FruitConfig) {
 	// Create an fruits group
-	g := c.R.Group("/fruits")
+	g := c.R.Group(c.BasePath + "/fruits")
 
+	g.Use(middleware.Authentication)
 	g.GET("/", handlerGetAllFruits)
-	g.POST("/", handlerAddFurit)
+	g.GET("/:id", middleware.QueryValidationMiddleware, handlerGetFruit)
 
+	g.Use(middleware.AuthenticateAdmin)
+	g.POST("/", handlerAddFurit)
+	g.Use(middleware.QueryValidationMiddleware)
 	// routes with Query middleware validation
-	g.Use(validator.QueryValidationMiddleware)
-	g.GET("/:id", handlerGetFruit)
 	g.DELETE("/:id", handlerRemoveFruit)
 }
 
+// Fetch Fruit		godoc
+// @Summary		fruits
+// @Description	get fruit info by id
+// @Param		id path int true "get fruit by id"
+// @produce		applicaton/json
+// @Router		/fruits/{id} [get]
+// @Success		200	{object} gin.H "time stamp"
+// @Success		401	{object} gin.H "unauthorized message"
+// @Security ApiKeyAuth
 func handlerGetFruit(c *gin.Context) {
 	id := c.MustGet("id").(int)
 	f, err := data.GetFruit(id)
 	if err != nil {
-		helper.ReqResHelper(c, http.StatusOK, nil, err.Error())
+		helper.ReqResHelper(c, http.StatusNotFound, nil, err.Error())
 		return
 	}
 	helper.ReqResHelper(c, http.StatusOK, f, nil)

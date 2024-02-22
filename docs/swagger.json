@@ -1,0 +1,235 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server todo server. You can visit the GitHub repository at https://github.com/LordGhostX/swag-gin-demo",
+        "title": "Go + Gin Todo API",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v0.1",
+    "paths": {
+        "/fruits/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get fruit info by id",
+                "produces": [
+                    "applicaton/json"
+                ],
+                "summary": "fruits",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "get fruit by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "time stamp",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "401": {
+                        "description": "unauthorized message",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "post": {
+                "description": "Save User data",
+                "produces": [
+                    "applicaton/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "create user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/data.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "create response",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "error response",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "description": "validate user and generate token",
+                "produces": [
+                    "applicaton/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Create authentication token",
+                "parameters": [
+                    {
+                        "description": "user email and password",
+                        "name": "Authentication",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/data.Authentication"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "token",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "422": {
+                        "description": "invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/verify": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Authenticate user token",
+                "produces": [
+                    "applicaton/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Verify user token",
+                "responses": {
+                    "200": {
+                        "description": "time stamp",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "401": {
+                        "description": "unauthorized message",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "data.Authentication": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 7
+                }
+            }
+        },
+        "data.User": {
+            "type": "object",
+            "required": [
+                "age",
+                "email",
+                "name",
+                "password",
+                "phone",
+                "role"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "email": {
+                    "description": "Authentication",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 7
+                },
+                "phone": {
+                    "type": "integer",
+                    "minimum": 10
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "manager",
+                        "user"
+                    ]
+                }
+            }
+        },
+        "gin.H": {
+            "type": "object",
+            "additionalProperties": {}
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
