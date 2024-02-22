@@ -100,3 +100,7 @@ rugby2312
     swag init --parseDependency
         or
     swag init -g path/to/main.go --parseDependency
+
+# Run swagger command to generate [httpClient]
+    can be used for testing
+    $   swagger generate client -f ../path/to/doc/swagger.yamlm -A <main-filename>

@@ -88,13 +88,13 @@ const docTemplate = `{
                     "400": {
                         "description": "error message",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     },
                     "401": {
                         "description": "unauthorized message",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     }
                 }
@@ -134,7 +134,7 @@ const docTemplate = `{
                     "401": {
                         "description": "unauthorized message",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     }
                 }
@@ -165,13 +165,13 @@ const docTemplate = `{
                     "200": {
                         "description": "create response",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     },
                     "400": {
                         "description": "error response",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     }
                 }
@@ -202,13 +202,13 @@ const docTemplate = `{
                     "200": {
                         "description": "token",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     },
                     "422": {
                         "description": "invalid data",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     }
                 }
@@ -233,13 +233,13 @@ const docTemplate = `{
                     "200": {
                         "description": "time stamp",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     },
                     "401": {
                         "description": "unauthorized message",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/helper.SwaggerRequestResponse"
                         }
                     }
                 }
@@ -337,9 +337,16 @@ const docTemplate = `{
                 }
             }
         },
-        "gin.H": {
+        "helper.SwaggerRequestResponse": {
             "type": "object",
-            "additionalProperties": {}
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {

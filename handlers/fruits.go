@@ -49,7 +49,7 @@ func NewFruitHandler(c *FruitConfig) {
 // @Router		/fruits/{id} [get]
 // @Tags		fruits
 // @Success		200	{object} data.Fruit "time stamp"
-// @Success		401	{object} gin.H "unauthorized message"
+// @Success		401	{object} helper.SwaggerRequestResponse "unauthorized message"
 // @Security ApiKeyAuth
 func handlerGetFruit(c *gin.Context) {
 	id := c.MustGet("id").(int)
@@ -69,8 +69,8 @@ func handlerGetFruit(c *gin.Context) {
 // @Router		/fruits [post]
 // @Tags		fruits
 // @Success		200	{object} data.Fruits "fruit list"
-// @Success		400	{object} gin.H "error message"
-// @Success		401	{object} gin.H "unauthorized message"
+// @Success		400	{object} helper.SwaggerRequestResponse "error message"
+// @Success		401	{object} helper.SwaggerRequestResponse "unauthorized message"
 // @Security ApiKeyAuth
 func handlerAddFurit(c *gin.Context) {
 	fruit := &data.Fruit{}
