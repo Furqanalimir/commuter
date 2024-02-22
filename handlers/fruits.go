@@ -13,11 +13,11 @@
 package handlers
 
 import (
-	"microservices/micro-service/commuter/data"
-	middleware "microservices/micro-service/commuter/middleware"
-	helper "microservices/micro-service/commuter/utils"
 	"net/http"
 
+	"github.com/furqanalimir/commuter/data"
+	"github.com/furqanalimir/commuter/middleware"
+	helper "github.com/furqanalimir/commuter/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,20 +30,29 @@ func NewFruitHandler(c *FruitConfig) {
 	// Create an fruits group
 	g := c.R.Group(c.BasePath + "/fruits")
 
-	g.GET("/", handlerGetAllFruits)
 	g.Use(middleware.Authentication)
+	g.GET("/", handlerGetAllFruits)
+	g.GET("/:id", middleware.QueryValidationMiddleware, handlerGetFruit)
+
 	g.Use(middleware.AuthenticateAdmin)
 	g.POST("/", handlerAddFurit)
-
-	// routes with Query middleware validation
 	g.Use(middleware.QueryValidationMiddleware)
-	// g.Use(helpers.)
-	g.GET("/:id", handlerGetFruit)
+	// routes with Query middleware validation
 	g.DELETE("/:id", handlerRemoveFruit)
 }
 
+// Fetch Fruit		godoc
+// @Summary		fruits
+// @Description	get fruit info by id
+// @produce		applicaton/json
+// @Success		200	{object} gin.H "time stamp"
+// @Success		401	{object} gin.H "unauthorized message"
+// @Param		id path int true "get fruit by id"
+// @Router		/fruits/{id} [get]
+// @Security ApiKeyAuth
 func handlerGetFruit(c *gin.Context) {
-	id := c.MustGet("id").(int)
+	id := c.GetInt("id")
+	// .(int)
 	f, err := data.GetFruit(id)
 	if err != nil {
 		helper.ReqResHelper(c, http.StatusNotFound, nil, err.Error())

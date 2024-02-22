@@ -19,7 +19,8 @@
 ├── middlewares
 │   └── auth.go
 ├── models
-│   └── user.gow
+│   └── user.go
 └── server
     ├── router.go
     └── server.go
+    

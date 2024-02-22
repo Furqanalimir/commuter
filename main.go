@@ -3,25 +3,52 @@ package main
 import (
 	"context"
 	"log"
-	"microservices/micro-service/commuter/handlers"
+
+	// _ "swag-gin-demo/docs"
+	_ "github.com/furqanalimir/commuter/docs"
+
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/furqanalimir/commuter/handlers"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 const (
 	basePath = "/api/v0.1"
 )
 
+// @BasePath /api/v0.1
+// @title Go + Gin Todo API
+// @version 1.0
+// @description This is a sample server todo server. You can visit the GitHub repository at https://github.com/LordGhostX/swag-gin-demo
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8080
+// @query.collection.format multi
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	// url := ginSwagger.URL("swagger/doc.json")
+	// router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	handlers.NewFruitHandler(&handlers.FruitConfig{
 		R:        router,
 		BasePath: basePath,

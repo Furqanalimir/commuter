@@ -1,12 +1,15 @@
 package handlers
 
 import (
-	"microservices/micro-service/commuter/data"
-	validator "microservices/micro-service/commuter/middleware"
-	helper "microservices/micro-service/commuter/utils"
 	"net/http"
 
+	"github.com/furqanalimir/commuter/data"
+	validator "github.com/furqanalimir/commuter/middleware"
+	helper "github.com/furqanalimir/commuter/utils"
+
 	"github.com/gin-gonic/gin"
+	// swaggerFiles "github.com/swaggo/files"
+	// ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type UserConfig struct {
@@ -17,7 +20,6 @@ type UserConfig struct {
 func NewUserHandler(c *UserConfig) {
 	// Create an fruits group
 	g := c.R.Group(c.BasePath + "/users")
-
 	g.POST("/", handlerAddUser)
 	g.POST("/login", handleLogin)
 
@@ -29,6 +31,15 @@ func NewUserHandler(c *UserConfig) {
 	// g.DELETE("/:id", handlerRemoveFruit)
 }
 
+// AddUser		godoc
+// @Summary		Create user
+// @Description	Save User data
+// @Param		user body data.User true "create user"
+// @produce		applicaton/json
+// @Tags		user
+// @Success		200	{object} gin.H  "create response"
+// @Success		400	{object} gin.H  "error response"
+// @Router		/users [post]
 func handlerAddUser(c *gin.Context) {
 	u := &data.User{}
 	err := u.ToJSON(c.Request.Body)
@@ -50,6 +61,15 @@ func handlerAddUser(c *gin.Context) {
 	helper.ReqResHelper(c, http.StatusOK, true, nil)
 }
 
+// Login		godoc
+// @Summary		Create authentication token
+// @Description	validate user and generate token
+// @Param       Authentication body data.Authentication true "user email and password"
+// @produce		applicaton/json
+// @Tags		user
+// @Success		200	{object} gin.H "token"
+// @Success		422	{object} gin.H "invalid data"
+// @Router		/users/login [post]
 func handleLogin(c *gin.Context) {
 	var u data.User
 	if err := c.ShouldBindJSON(&u); err != nil {
@@ -66,6 +86,15 @@ func handleLogin(c *gin.Context) {
 	helper.ReqResHelper(c, http.StatusOK, token, nil)
 }
 
+// Verify		godoc
+// @Summary		Verify user token
+// @Description	Authenticate user token
+// @produce		applicaton/json
+// @Tags		user
+// @Success		200	{object} gin.H "time stamp"
+// @Success		401	{object} gin.H "unauthorized message"
+// @Router		/users/verify [get]
+// @Security ApiKeyAuth
 func handlerVerifyUser(c *gin.Context) {
 	validity, err := helper.GetTokenValidity(c.Request)
 	// tokenAuth

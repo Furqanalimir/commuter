@@ -2,7 +2,7 @@ package data
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io"
 	"log"
 	"time"
@@ -72,7 +72,7 @@ func GetFruit(id int) (*Fruit, error) {
 			return f, nil
 		}
 	}
-	return &Fruit{}, errors.New("item not found")
+	return &Fruit{}, fmt.Errorf("item with id %d not found", id)
 }
 func GetAllFuits() Fruits {
 	return fruitList
@@ -90,7 +90,7 @@ func RemoveFruit(id int) error {
 			return nil
 		}
 	}
-	return errors.New("item not found")
+	return fmt.Errorf("item with id %d not found", id)
 }
 
 var fruitList = Fruits{

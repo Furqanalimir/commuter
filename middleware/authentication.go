@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	helper "microservices/micro-service/commuter/utils"
 	"net/http"
+
+	helper "github.com/furqanalimir/commuter/utils"
 
 	"github.com/gin-gonic/gin"
 )

@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"time"
@@ -10,13 +11,18 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+type Authentication struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=7"`
+}
 type User struct {
-	ID        int       `json:"id"`
-	UserName  string    `json:"name" validate:"required,min=3"`
+	ID       int    `json:"id"`
+	UserName string `json:"name" validate:"required,min=3"`
+	// Authentication
 	Email     string    `json:"email" validate:"required,email"`
+	Password  string    `json:"password" validate:"required,min=7"`
 	Phone     int       `json:"phone" validate:"required,numeric,min=10"`
 	Age       int       `json:"age" validate:"required,gt=12"`
-	Password  string    `json:"password" validate:"required,min=7"`
 	Role      string    `json:"role" validate:"required,oneof=admin manager user"`
 	createdAt time.Time `json:"-"`
 	updatedAt time.Time `json:"-"`
@@ -83,13 +89,12 @@ func GetUserById(id int) (*User, error) {
 			return &u, nil
 		}
 	}
-	return &User{}, errors.New("User not found")
+	return &User{}, fmt.Errorf("User with id %d not found", id)
 }
 
 func (u *User) VerifyUser() (uint64, error) {
 
 	for _, user := range userData {
-		log.Println("[user]: ", user.Email)
 		if user.Email == u.Email && user.Password == u.Password {
 			return uint64(user.ID), nil
 		}
@@ -99,7 +104,6 @@ func (u *User) VerifyUser() (uint64, error) {
 
 func GetUserByEmail(email string) (*User, error) {
 	for _, u := range userData {
-		log.Println("[u]: ", u)
 		if u.Email == email {
 			return &u, nil
 		}
@@ -134,23 +138,23 @@ var userData = []User{
 		ID:        100,
 		UserName:  "jhon doe",
 		Email:     "jhondoe@gmail.com",
+		Password:  "password123",
 		Phone:     1234567890,
 		Age:       19,
-		Password:  "password123",
 		Role:      "user",
 		createdAt: time.Now().UTC(),
 		updatedAt: time.Now().UTC(),
 		deletedAt: time.Now().UTC(),
 	},
-	// User{
-	// 	ID:        1,
-	// 	UserName:  "jhon",
-	// 	Email:     "jhon.gmail.com",
-	// 	Phone:     12345678,
-	// 	Age:       11,
-	// 	Password:  "pass",
-	// 	createdAt: time.Now().UTC(),
-	// 	updatedAt: time.Now().UTC(),
-	// 	deletedAt: time.Now().UTC(),
-	// },
+	User{
+		ID:        1,
+		UserName:  "joe",
+		Email:     "joe@gmail.com",
+		Password:  "1234567890",
+		Phone:     12345678,
+		Age:       11,
+		createdAt: time.Now().UTC(),
+		updatedAt: time.Now().UTC(),
+		deletedAt: time.Now().UTC(),
+	},
 }

@@ -3,12 +3,13 @@ package helper
 import (
 	"errors"
 	"fmt"
-	"microservices/micro-service/commuter/data"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/furqanalimir/commuter/data"
 
 	jwt "github.com/golang-jwt/jwt/v5"
 )
