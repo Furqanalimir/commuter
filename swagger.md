@@ -63,13 +63,13 @@ rugby2312
     _ "github.com/furqanalimir/commuter/docs"
 #   Add below to above main func:
         // @BasePath /api/v0.1
-        // @title Go + Gin Todo API
+        // @title Go + Gin User API
         // @version 1.0
-        // @description This is a sample server todo server. You can visit the GitHub repository at https://github.com/LordGhostX/swag-gin-demo
+        // @description This is a sample server user server. You can visit the GitHub repository at https://github.com/Furqanalimir/commuter
         
         // @contact.name API Support
-        // @contact.url http://www.swagger.io/support
-        // @contact.email support@swagger.io
+        // @contact.url https://furqanali.vercel.app/
+        // @contact.email mirfurqan89@gmail.com
         
         // @license.name MIT
         // @license.url https://opensource.org/licenses/MIT
@@ -82,14 +82,15 @@ rugby2312
     // AddUser		godoc
     // @Summary		Create user
     // @Description	Save User data
-    // @Param		user body data.User true "create user"
-    // @Param		email formData string true "email address"
-    // @produce		applicaton/json
-    // @Tags		user
-    // @Success		200	{object} gin.H  "create response"
-    // @Success		400	{object} gin.H  "error response"
-    // @Router		/user [post]
-
+    // @Param		user body data.User true "create user"      #expectes in body with type User (ex: {Email, Phone etc...})
+    // @Param		email formData string true "email address"  #expectes in formData or x-www-form-urlencooded string (check how to differentiate)
+    // @Param		id path int true "get fruit by id"          #expects id in url of type int
+    // @produce		applicaton/json                             #response type produced
+    // @Tags		user                                        #tag
+    // @Success		200	{object} gin.H  "create response"       #status {objecct} type "heading/message"
+    // @Success		400	{object} gin.H  "error response"        #diffstatus {objecct} type "heading/message"
+    // @Router		/user [post]                                #route type
+    // @Security ApiKeyAuth                                     #middleware validation (will send token in header)
 
 # Run
     swag init

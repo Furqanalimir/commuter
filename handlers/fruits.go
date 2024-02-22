@@ -44,15 +44,14 @@ func NewFruitHandler(c *FruitConfig) {
 // Fetch Fruit		godoc
 // @Summary		fruits
 // @Description	get fruit info by id
+// @Param		id path int true "get fruit by id"
 // @produce		applicaton/json
+// @Router		/fruits/{id} [get]
 // @Success		200	{object} gin.H "time stamp"
 // @Success		401	{object} gin.H "unauthorized message"
-// @Param		id path int true "get fruit by id"
-// @Router		/fruits/{id} [get]
 // @Security ApiKeyAuth
 func handlerGetFruit(c *gin.Context) {
-	id := c.GetInt("id")
-	// .(int)
+	id := c.MustGet("id").(int)
 	f, err := data.GetFruit(id)
 	if err != nil {
 		helper.ReqResHelper(c, http.StatusNotFound, nil, err.Error())

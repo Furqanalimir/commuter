@@ -1,26 +1,10 @@
-# Boilerplate structure
-.
-├── Makefile
-├── Procfile
-├── README.md
-├── config
-│   ├── config.go
-│   ├── development.yaml
-│   ├── production.yaml
-│   └── test.yaml
-├── controllers
-│   └── user.go
-├── db
-│   └── db.go
-├── forms
-│   └── user.go
-├── header.jpg
-├── main.go
-├── middlewares
-│   └── auth.go
-├── models
-│   └── user.go
-└── server
-    ├── router.go
-    └── server.go
-    
+#  Title: [Commuter]
+
+# Description
+    Simple app that displayes information about fruits including current prices in different currencies
+
+# How to run
+    install dependencies
+    check swagger.md for swagger docs
+# Run 
+    go run main.go
