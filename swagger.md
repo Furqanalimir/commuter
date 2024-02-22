@@ -29,10 +29,9 @@ rugby2312
 
 
 #   [Tutorial] [youtube]
-# Install swagger
+# Install swagger cmd
     $ go get -u github.com/swaggo/swag/cmd/swag
-
-# install latest version
+                or
     $ go get -u github.com/swaggo/swag/cmd/swag@latest
 
 # add libraries
@@ -42,8 +41,11 @@ rugby2312
 # [warning]
     if swag command not found, run:
         $ export PATH=$PATH:$GOPATH/bin
+            of
+        export PATH="/home/hussain/go/bin/:$PATH"
+        (path to swag which inside [user/go/bin])
 
-# Initialize swagger 
+# Initialize swagger [if creating new]
     $ swag init
     now new folder is created as docs, which has docs.go, swagger.yaml and swagger.json
 

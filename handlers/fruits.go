@@ -32,7 +32,7 @@ func NewFruitHandler(c *FruitConfig) {
 
 	g.Use(middleware.Authentication)
 	g.GET("/", handlerGetAllFruits)
-	g.GET("/:id", middleware.QueryValidationMiddleware, handlerGetFruit)
+	g.GET("/:id", middleware.QueryValidationMiddlewareD("id", "id is required and must be an integer"), handlerGetFruit)
 
 	g.Use(middleware.AuthenticateAdmin)
 	g.POST("/", handlerAddFurit)
@@ -42,12 +42,13 @@ func NewFruitHandler(c *FruitConfig) {
 }
 
 // Fetch Fruit		godoc
-// @Summary		fruits
+// @Summary		fruits by id
 // @Description	get fruit info by id
 // @Param		id path int true "get fruit by id"
 // @produce		applicaton/json
 // @Router		/fruits/{id} [get]
-// @Success		200	{object} gin.H "time stamp"
+// @Tags		fruits
+// @Success		200	{object} data.Fruit "time stamp"
 // @Success		401	{object} gin.H "unauthorized message"
 // @Security ApiKeyAuth
 func handlerGetFruit(c *gin.Context) {
@@ -60,6 +61,17 @@ func handlerGetFruit(c *gin.Context) {
 	helper.ReqResHelper(c, http.StatusOK, f, nil)
 }
 
+// Add Fruit		godoc
+// @Summary		add fruit to fruits list
+// @Description	add fruit info to stoed data
+// @Param		fruit body data.Fruit true "fruit data"
+// @produce		applicaton/json
+// @Router		/fruits [post]
+// @Tags		fruits
+// @Success		200	{object} data.Fruits "fruit list"
+// @Success		400	{object} gin.H "error message"
+// @Success		401	{object} gin.H "unauthorized message"
+// @Security ApiKeyAuth
 func handlerAddFurit(c *gin.Context) {
 	fruit := &data.Fruit{}
 	fruit.ToJSON(c.Request.Body)
@@ -76,6 +88,14 @@ func handlerAddFurit(c *gin.Context) {
 	helper.ReqResHelper(c, http.StatusOK, fl, nil)
 }
 
+// Fetch Fruits godoc
+// @Summary 	Fetch all fruits
+// @Description fetch list of all available fruits
+// @produce		application/json
+// @Router		/fruits [get]
+// @Tags		fruits
+// @Success		200 {object} data.Fruits "fruit list"
+// @Security ApiKeyAuth
 func handlerGetAllFruits(c *gin.Context) {
 	f := data.GetAllFuits()
 	helper.ReqResHelper(c, http.StatusOK, f, nil)

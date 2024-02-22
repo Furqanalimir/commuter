@@ -11,8 +11,8 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "contact": {
             "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+            "url": "https://furqanali.vercel.app/",
+            "email": "mirfurqan89@gmail.com"
         },
         "license": {
             "name": "MIT",
@@ -23,6 +23,83 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/fruits": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "fetch list of all available fruits",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "fruits"
+                ],
+                "summary": "Fetch all fruits",
+                "responses": {
+                    "200": {
+                        "description": "fruit list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/data.Fruit"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "add fruit info to stoed data",
+                "produces": [
+                    "applicaton/json"
+                ],
+                "tags": [
+                    "fruits"
+                ],
+                "summary": "add fruit to fruits list",
+                "parameters": [
+                    {
+                        "description": "fruit data",
+                        "name": "fruit",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/data.Fruit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "fruit list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/data.Fruit"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "error message",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "401": {
+                        "description": "unauthorized message",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/fruits/{id}": {
             "get": {
                 "security": [
@@ -34,7 +111,10 @@ const docTemplate = `{
                 "produces": [
                     "applicaton/json"
                 ],
-                "summary": "fruits",
+                "tags": [
+                    "fruits"
+                ],
+                "summary": "fruits by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -48,7 +128,7 @@ const docTemplate = `{
                     "200": {
                         "description": "time stamp",
                         "schema": {
-                            "$ref": "#/definitions/gin.H"
+                            "$ref": "#/definitions/data.Fruit"
                         }
                     },
                     "401": {
@@ -183,6 +263,38 @@ const docTemplate = `{
                 }
             }
         },
+        "data.Fruit": {
+            "type": "object",
+            "required": [
+                "currency",
+                "name",
+                "origin",
+                "price"
+            ],
+            "properties": {
+                "currency": {
+                    "type": "string",
+                    "enum": [
+                        "usd",
+                        "kd"
+                    ]
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 4
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
         "data.User": {
             "type": "object",
             "required": [
@@ -198,7 +310,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "email": {
-                    "description": "Authentication",
                     "type": "string"
                 },
                 "id": {
@@ -246,8 +357,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api/v0.1",
 	Schemes:          []string{},
-	Title:            "Go + Gin Todo API",
-	Description:      "This is a sample server todo server. You can visit the GitHub repository at https://github.com/LordGhostX/swag-gin-demo",
+	Title:            "Go + Gin User API",
+	Description:      "This is a sample server user server. You can visit the GitHub repository at https://github.com/Furqanalimir/commuter",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

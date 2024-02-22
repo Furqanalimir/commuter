@@ -9,6 +9,7 @@ import (
 )
 
 func Authentication(c *gin.Context) {
+	// validate token
 	err := helper.TokenValid(c.Request)
 	if err != nil {
 		helper.ReqResHelper(c, http.StatusNonAuthoritativeInfo, nil, err.Error())
@@ -18,6 +19,7 @@ func Authentication(c *gin.Context) {
 }
 
 func AuthenticateAdmin(c *gin.Context) {
+	// verify if user is admin or not
 	err := helper.VerifyAdmin(c.Request)
 	if err != nil {
 		helper.ReqResHelper(c, http.StatusNonAuthoritativeInfo, nil, err.Error())
